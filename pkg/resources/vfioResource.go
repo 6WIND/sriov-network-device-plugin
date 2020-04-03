@@ -29,6 +29,7 @@ import (
 */
 type vfioResource struct {
 	vfioMount string
+	vhostMount string
 }
 
 // NewVfioResource create instance of VFIO DeviceInfoProvider
@@ -36,6 +37,7 @@ func NewVfioResource() types.DeviceInfoProvider {
 
 	return &vfioResource{
 		vfioMount: "/dev/vfio/vfio",
+		vhostMount: "/dev/vhost-net",
 	}
 
 }
@@ -47,6 +49,11 @@ func (rp *vfioResource) GetDeviceSpecs(pciAddr string) []*pluginapi.DeviceSpec {
 	devSpecs = append(devSpecs, &pluginapi.DeviceSpec{
 		HostPath:      rp.vfioMount,
 		ContainerPath: rp.vfioMount,
+		Permissions:   "mrw",
+	})
+	devSpecs = append(devSpecs, &pluginapi.DeviceSpec{
+		HostPath:      rp.vhostMount,
+		ContainerPath: rp.vhostMount,
 		Permissions:   "mrw",
 	})
 
